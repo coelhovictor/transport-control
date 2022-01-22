@@ -39,16 +39,19 @@
                                     Informations
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link tab-profile" href="#profile-picture" data-toggle="tab">
-                                    Picture
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link tab-profile" href="#change-password" data-toggle="tab">
-                                    Change Password
-                                </a>
-                            </li>
+                            @if (!User.isTestAccount())
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link tab-profile" href="#profile-picture" data-toggle="tab">
+                                        Picture
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link tab-profile" href="#change-password" data-toggle="tab">
+                                        Change Password
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </div>
                 </div>

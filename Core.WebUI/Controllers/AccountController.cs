@@ -1,6 +1,8 @@
 ﻿using Core.Domain.Account;
 using Core.WebUI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Threading.Tasks;
 
 namespace Core.WebUI.Controllers
@@ -8,10 +10,12 @@ namespace Core.WebUI.Controllers
     public class AccountController : Controller
     {
         private readonly IAuthenticate _authentication;
+        private readonly IConfiguration _configuration;
 
-        public AccountController(IAuthenticate authentication)
+        public AccountController(IAuthenticate authentication, IConfiguration configuration)
         {
             _authentication = authentication;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -42,6 +46,27 @@ namespace Core.WebUI.Controllers
             {
                 ModelState.AddModelError(string.Empty, "Invalid login attempt");
                 return View(model);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LoginTest()
+        {
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            string email = "usuario@localhost";
+            string password = env == "Development" ? _configuration.GetSection("AppSettings")["PasswordDefaultUsuario"] :
+                Environment.GetEnvironmentVariable("PASSWORD_DEFAULT_USUARIO");
+
+            var result = await _authentication.Authenticate(email, password);
+            if (result)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt");
+                return View("Login", new LoginViewModel());
             }
         }
 

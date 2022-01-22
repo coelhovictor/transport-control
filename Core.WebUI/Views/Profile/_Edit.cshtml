@@ -26,7 +26,7 @@
                 <div class="form-group">
                     <label for="FirstName" class="col-sm-2 col-form-label">First name</label>
                     <div class="input-group col-sm-12">
-                        <input class="form-control" type="text" id="FirstName" placeholder="First name" value="@currentUser.FirstName" maxlength="25" required />
+                        <input class="form-control" type="text" id="FirstName" placeholder="First name" value="@currentUser.FirstName" maxlength="25" required @(User.isTestAccount() ? "disabled" : "") />
                         <div class="input-group-append">
                         </div>
                         <span id="FirstName-msg" class="error-form text-danger"></span>
@@ -35,7 +35,7 @@
                 <div class="form-group">
                     <label for="LastName" class="col-sm-2 col-form-label">Last name</label>
                     <div class="input-group col-sm-12">
-                        <input class="form-control" type="text" id="LastName" placeholder="Last name" value="@currentUser.LastName" maxlength="25" />
+                        <input class="form-control" type="text" id="LastName" placeholder="Last name" value="@currentUser.LastName" maxlength="25" @(User.isTestAccount() ? "disabled" : "")/>
                         <div class="input-group-append">
                         </div>
                         <span id="LastName-msg" class="error-form text-danger"></span>

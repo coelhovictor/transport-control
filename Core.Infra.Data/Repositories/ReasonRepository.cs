@@ -51,9 +51,9 @@ namespace Core.Infra.Data.Repositories
         {
             reason.UpdatedAt = DateTime.Now;
 
-            Reason old = new Reason { Id = reason.Id };
-            _reasonContext.Reasons.Attach(old);
-            _reasonContext.Entry(old).CurrentValues.SetValues(reason);
+            _reasonContext.Entry(reason).State = EntityState.Modified;
+            _reasonContext.Entry(reason).Property(p => p.Id).IsModified = false;
+            _reasonContext.Entry(reason).Property(p => p.CreatedAt).IsModified = false;
 
             await _reasonContext.SaveChangesAsync();
             return reason;

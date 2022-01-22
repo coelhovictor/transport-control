@@ -51,9 +51,9 @@ namespace Core.Infra.Data.Repositories
         {
             type.UpdatedAt = DateTime.Now;
 
-            TransportType old = new TransportType { Id = type.Id };
-            _typeContext.TransportTypes.Attach(old);
-            _typeContext.Entry(old).CurrentValues.SetValues(type);
+            _typeContext.Entry(type).State = EntityState.Modified;
+            _typeContext.Entry(type).Property(p => p.Id).IsModified = false;
+            _typeContext.Entry(type).Property(p => p.CreatedAt).IsModified = false;
 
             await _typeContext.SaveChangesAsync();
             return type;

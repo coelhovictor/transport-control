@@ -18,6 +18,7 @@ namespace Core.Infra.Data.Repositories
         {
             return await _typeContext.TransportTags.FindAsync(id);
         }
+
         public async Task<TransportTag> AddTagAsync(Transport transport, Tag tag)
         {
             TransportTag transportTag = new TransportTag() { TransportId = transport.Id, TagId = tag.Id };

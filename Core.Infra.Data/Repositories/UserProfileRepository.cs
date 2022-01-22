@@ -48,9 +48,9 @@ namespace Core.Infra.Data.Repositories
 
             profile.UpdatedAt = DateTime.Now;
 
-            UserProfile old = new UserProfile { Id = profile.Id };
-            _profileContext.UserProfiles.Attach(old);
-            _profileContext.Entry(old).CurrentValues.SetValues(profile);
+            _profileContext.Entry(profile).State = EntityState.Modified;
+            _profileContext.Entry(profile).Property(p => p.Id).IsModified = false;
+            _profileContext.Entry(profile).Property(p => p.CreatedAt).IsModified = false;
 
             await _profileContext.SaveChangesAsync();
             return profile;

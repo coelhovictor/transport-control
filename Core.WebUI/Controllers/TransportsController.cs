@@ -87,6 +87,10 @@ namespace Core.WebUI.Controllers
             if (transportDTO == null) return BadRequest("Invalid data");
 
             transportDTO.Id = Guid.NewGuid().ToString();
+
+            foreach(var tag in transportDTO.TransportTags)
+                if(string.IsNullOrEmpty(tag.Id)) tag.Id = Guid.NewGuid().ToString();
+
             await _transportService.AddAsync(transportDTO, profile);
 
             return Json(transportDTO);
@@ -103,6 +107,11 @@ namespace Core.WebUI.Controllers
 
             if (transportDTO == null) return BadRequest("Invalid data");
             transportDTO.Id = id;
+
+            if(transportDTO.TransportTags != null)
+                foreach (var tag in transportDTO.TransportTags)
+                    if (string.IsNullOrEmpty(tag.Id)) tag.Id = Guid.NewGuid().ToString();
+
 
             await _transportService.UpdateAsync(transportDTO, profile);
             return Json(transportDTO);

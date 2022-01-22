@@ -51,9 +51,9 @@ namespace Core.Infra.Data.Repositories
         {
             tag.UpdatedAt = DateTime.Now;
 
-            Tag old = new Tag { Id = tag.Id };
-            _tagContext.Tags.Attach(old);
-            _tagContext.Entry(old).CurrentValues.SetValues(tag);
+            _tagContext.Entry(tag).State = EntityState.Modified;
+            _tagContext.Entry(tag).Property(p => p.Id).IsModified = false;
+            _tagContext.Entry(tag).Property(p => p.CreatedAt).IsModified = false;
 
             await _tagContext.SaveChangesAsync();
             return tag;

@@ -114,19 +114,23 @@ namespace Core.Infra.Data.Repositories
             var tagsList = await _typeContext.TransportTags
                 .Where(x => x.TransportId == transport.Id).ToListAsync();
 
+            foreach (var tag in transport.TransportTags)
+            {
+                if (tagsList.All(x => x.Id != tag.Id))
+                    _typeContext.TransportTags.Add(tag);
+            }
+
             foreach (var tag in tagsList)
             {
                 if (transport.TransportTags.All(x => x.Id != tag.Id))
-                {
                     _typeContext.TransportTags.Remove(tag);
-                }
             }
 
             transport.UpdatedAt = DateTime.Now;
 
-            Transport old = new Transport { Id = transport.Id };
-            _typeContext.Transports.Attach(old);
-            _typeContext.Entry(old).CurrentValues.SetValues(transport);
+            _typeContext.Entry(transport).State = EntityState.Modified;
+            _typeContext.Entry(transport).Property(p => p.Id).IsModified = false;
+            _typeContext.Entry(transport).Property(p => p.CreatedAt).IsModified = false;
 
             await _typeContext.SaveChangesAsync();
             return transport;

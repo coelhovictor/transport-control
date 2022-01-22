@@ -76,10 +76,24 @@ namespace Core.WebUI.Controllers
 
         private async Task<string> UploadImage(IFormFile file)
         {
-            Account account = new Account(
-                _configuration.GetSection("AppSettings").GetSection("CloudinarySettings")["CloudName"],
-                _configuration.GetSection("AppSettings").GetSection("CloudinarySettings")["ApiKey"],
-                _configuration.GetSection("AppSettings").GetSection("CloudinarySettings")["ApiSecret"]);
+            Account account;
+
+            string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (env == "Development")
+            {
+                account = new Account(
+                    _configuration.GetSection("AppSettings").GetSection("CloudinarySettings")["CloudName"],
+                    _configuration.GetSection("AppSettings").GetSection("CloudinarySettings")["ApiKey"],
+                    _configuration.GetSection("AppSettings").GetSection("CloudinarySettings")["ApiSecret"]
+                );
+            } else
+            {
+                account = new Account(
+                    Environment.GetEnvironmentVariable("CLOUDINARY_CLOUD_NAME"),
+                    Environment.GetEnvironmentVariable("CLOUDINARY_API_KEY"),
+                    Environment.GetEnvironmentVariable("CLOUDINARY_API_SECRET")
+                );
+            }
 
             Cloudinary cloudinary = new Cloudinary(account);
 

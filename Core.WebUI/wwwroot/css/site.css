@@ -126,11 +126,11 @@
     margin-top: 15px !important;
 }
 
-.nav-link {
+.tab-profile {
     color: #cfcfcf !important;
 }
 
-.nav-link.active {
+.tab-profile.active {
     border-left: 4px solid #3f4e5e;
     background-color: #3a3e42;
 }

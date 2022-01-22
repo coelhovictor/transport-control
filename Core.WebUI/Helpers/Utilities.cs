@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
-using System.IO;
 using System.Security.Claims;
 
 namespace Core.WebUI.Helpers
@@ -13,6 +12,12 @@ namespace Core.WebUI.Helpers
         {
             if (!user.Identity.IsAuthenticated) return null;
             return userManager.FindByEmailAsync(user.Identity.Name).Result;
+        }
+
+        public static bool IsDev(this IHtmlHelper html)
+        {
+            string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            return env.Equals("Development") ? true : false;
         }
 
         public static string IsActive(this IHtmlHelper html, string action, string control)

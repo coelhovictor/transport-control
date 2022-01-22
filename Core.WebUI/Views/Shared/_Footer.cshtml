@@ -1,5 +1,16 @@
 ﻿<footer class="main-footer">
-    <strong>&copy; @DateTime.Now.Year <a href="https://github.com/coelhovictor">github.com/coelhovictor</a></strong>
+    <strong>
+        &copy; @DateTime.Now.Year
+
+        @if (Html.IsDev())
+        {
+            <span class="development">(Development environment)</span>
+        }
+        else
+        {
+            <a href="https://github.com/coelhovictor">github.com/coelhovictor</a>
+        }
+    </strong>
     <div class="float-right d-none d-sm-inline-block">
         <b>Version</b> 1.0.0.0
     </div>

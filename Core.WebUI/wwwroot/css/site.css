@@ -134,3 +134,7 @@
     border-left: 4px solid #3f4e5e;
     background-color: #3a3e42;
 }
+
+.development {
+    color: orange;
+}

@@ -1,0 +1,240 @@
+﻿@model Core.Application.DTOs.UserProfileDTOGet
+
+@inject Microsoft.AspNetCore.Identity.UserManager<Core.Infra.Data.Identity.ApplicationUser> userManager;
+
+@{ var currentUser = @User.UserProfile(userManager); }
+
+<div class="card card-primary card-outline">
+    <div class="card-body">
+        <div class="tab-content">
+
+            <div class="active tab-pane" id="account">
+
+                <div class="form-group">
+                    <label for="Email" class="col-sm-2 col-form-label">Email</label>
+                    <div class="input-group col-sm-12">
+                        <input class="form-control" type="Email" id="Email" placeholder="Email" value="@Model.Email" disabled />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                        <span id="Email-msg" class="error-form text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="FirstName" class="col-sm-2 col-form-label">First name</label>
+                    <div class="input-group col-sm-12">
+                        <input class="form-control" type="text" id="FirstName" placeholder="First name" value="@currentUser.FirstName" maxlength="25" required />
+                        <div class="input-group-append">
+                        </div>
+                        <span id="FirstName-msg" class="error-form text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="LastName" class="col-sm-2 col-form-label">Last name</label>
+                    <div class="input-group col-sm-12">
+                        <input class="form-control" type="text" id="LastName" placeholder="Last name" value="@currentUser.LastName" maxlength="25" />
+                        <div class="input-group-append">
+                        </div>
+                        <span id="LastName-msg" class="error-form text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="tab-pane" id="informations">
+
+                <div class="form-group">
+                    <label for="Birthdate" class="col-sm-2 col-form-label">Birthdate</label>
+                    <div class="col-sm-12">
+                        <div class="input-group date datepickertime-wtime" id="Birthdate-container" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" id="Birthdate" data-target="#Birthdate-container" />
+                            <div class="input-group-append" data-target="#Birthdate-container" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                        <span id="Birthdate-msg" class="error-form text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Profession" class="col-sm-2 col-form-label">Profession</label>
+                    <div class="input-group col-sm-12">
+                        <input class="form-control" type="text" id="Profession" placeholder="Profession" value="@Model.Profession" maxlength="35" />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-user-tie"></span>
+                            </div>
+                        </div>
+                        <span id="Profession-msg" class="error-form text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Location" class="col-sm-2 col-form-label">Location</label>
+                    <div class="input-group col-sm-12">
+                        <input class="form-control" type="text" id="Location" placeholder="Location" value="@Model.Location" maxlength="35" />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-map-marker-alt"></span>
+                            </div>
+                        </div>
+                        <span id="Location-msg" class="error-form text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="tab-pane" id="profile-picture">
+                <div class="form-group">
+                    <label for="Photo" class="col-sm-2 col-form-label">Photo</label>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <img class="profile-user user-large" id="Photo-preview" src="/images/noimage.png" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="Photo" accept=".jpg,.jpeg,.png">
+                                    <label class="custom-file-label" for="Photo">Choose file</label>
+                                </div>
+                            </div>
+                            <span id="Photo-msg" class="error-form text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <button type="submit" class="btn btn-primary" data-id="@Model.Id" id="btn-edit">Save changes</button>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+        bsCustomFileInput.init();
+
+        $('#Photo').on('change', updatePicturePreview);
+
+        $('#btn-edit').on('click', edit);
+    })
+
+    function updatePicturePreview() {
+        let file = $('#Photo')[0].files[0];
+
+        let url = "/images/noimage.png";
+        if (file) {
+            let extensions = ['png', 'jpeg', 'jpg'];
+            let ext = file.name.split('.').pop().toLowerCase();
+            if (!extensions.includes(ext)) {
+                errorFormInvalid('#Photo', 'Invalid picture file type!');
+            } else {
+                url = URL.createObjectURL(file);
+                hideFormInvalid('#Photo');
+            }
+        }
+
+        $('#Photo-preview').attr('src', url);
+    }
+
+    function validEdit() {
+
+        let firstName = $('#FirstName').val(),
+            lastName = $('#LastName').val(),
+            profession = $('#Profession').val(),
+            location = $('#Location').val(),
+            photo = $('#Photo')[0].files[0];
+
+        hideFormInvalid('#FirstName');
+        hideFormInvalid('#LastName');
+        hideFormInvalid('#Profession');
+        hideFormInvalid('#Location');
+        hideFormInvalid('#Photo');
+
+        if (!firstName) {
+            errorFormInvalid('#FirstName', 'First name field is required!');
+            return false;
+        }
+
+        if (firstName.length > 25) {
+            errorFormInvalid('#FirstName', 'First name is too long!');
+            return false;
+        }
+
+        if (lastName && lastName.length > 25) {
+            errorFormInvalid('#LastName', 'Last name is too long!');
+            return false;
+        }
+
+        if (profession && profession.length > 35) {
+            errorFormInvalid('#Profession', 'Profession is too long!');
+            return false;
+        }
+
+        if (location && location.length > 35) {
+            errorFormInvalid('#Location', 'Location is too long!');
+            return false;
+        }
+
+        if (photo) {
+            let extensions = ['png', 'jpeg', 'jpg'];
+            let ext = photo.name.split('.').pop().toLowerCase();
+            if (!extensions.includes(ext)) {
+                errorFormInvalid('#Photo', 'Invalid picture file type!');
+                return false;
+            }
+        }
+
+        if (photo && photo.size > 1000000) {
+            errorFormInvalid('#Photo', 'Please upload a image less than 1MB.');
+            return false;
+        }
+
+        return true;
+    }
+
+    function edit() {
+        if (!validEdit()) {
+            return;
+        }
+
+        let url = '@Url.Action("Edit", "Profile")';
+
+        let formData = new FormData();
+        formData.append('id', $(this).attr('data-id'));
+        formData.append('profile.email', $('#Email').val());
+        formData.append('profile.firstName', $('#FirstName').val());
+        formData.append('profile.lastName', $('#LastName').val());
+        formData.append('profile.birthDate', formatDate($('#Birthdate').val()));
+        formData.append('profile.profession', $('#Profession').val());
+        formData.append('profile.location', $('#Location').val());
+        formData.append('files', $('#Photo')[0].files[0]);
+
+        $('#btn-edit').attr('disabled', 'disabled');
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                successMessage('Successfully edited!');
+                reloadPage(1000);
+            },
+            error: function (response) {
+                errorMessage('An error occurred: ' + response.responseText);
+                $('#btn-edit').removeAttr('disabled');
+            }
+        })
+    }
+
+</script>

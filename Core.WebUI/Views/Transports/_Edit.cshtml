@@ -1,0 +1,210 @@
+﻿<div class="modal fade" id="modal-edit">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Transport</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="TransportTypeEdit" class="col-lg-2 control-label">Type</label>
+                            <div class="col-lg-12">
+                                @Html.DropDownList("TransportTypeEdit", new SelectList(ViewBag.Types, "Id", "Name"), new { @class = "from-control select2-none" })
+                                <span id="TransportTypeEdit-msg" class="error-form text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="DateEdit" class="col-lg-2 control-label">Date</label>
+                            <div class="col-lg-12">
+                                <div class="input-group date datepickertime" id="DateEdit-container" data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input" id="DateEdit" data-target="#DateEdit-container" />
+                                    <div class="input-group-append" data-target="#DateEdit-container" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                                <span id="DateEdit-msg" class="error-form text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="NameEdit" class="col-lg-2 control-label">Name</label>
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" id="NameEdit" placeholder="Name" maxlength="30">
+                                <span id="NameEdit-msg" class="error-form text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="PriceEdit" class="col-lg-2 control-label">Price</label>
+                            <div class="col-lg-12">
+                                <input type="number" class="form-control" id="PriceEdit" placeholder="Price" min="0.01" max="10000">
+                                <span id="PriceEdit-msg" class="error-form text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="ReasonEdit" class="col-lg-2 control-label">Reason</label>
+                            <div class="col-lg-12">
+                                @Html.DropDownList("ReasonEdit", new SelectList(ViewBag.Reasons, "Id", "Name"), new { @class = "from-control select2-none" })
+                                <span id="ReasonEdit-msg" class="error-form text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="TagsEdit" class="col-lg-2 control-label">Tags</label>
+                            <div class="col-lg-12">
+                                @Html.DropDownList("TagsEdit", new SelectList(ViewBag.Tags, "Id", "Name"), new { @class = "from-control form-control-sm select2 select-multiple", @multiple = "multiple" })
+                                <span id="TagsEdit-msg" class="error-form text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="btn-edit" data-id="" type="button" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+        $('#btn-edit').on('click', edit);
+    })
+
+    function modalEdit() {
+        let url = '@Url.Action("Get", "Transports")';
+        let formData = {
+            id: $(this).attr('data-id')
+        };
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                if (response.transportType) {
+                    $('#TransportTypeEdit').val(response.transportType.id);
+                    $('#TransportTypeEdit').trigger('change');
+                }
+                $('#DateEdit').val(dateFormatedWithDate(response.date));
+                $('#NameEdit').val(response.name);
+                $('#PriceEdit').val(response.price);
+                if (response.reason) {
+                    $('#ReasonEdit').val(response.reason.id);
+                    $('#ReasonEdit').trigger('change');
+                }
+
+                let tagsVal = response.transportTags;
+                let tags = [];
+                if (tagsVal) {
+                    for (let index in tagsVal) {
+                        tags.push(tagsVal[index].tag.id);
+                    }
+                }
+
+                $('#TagsEdit').val(tags);
+                $('#TagsEdit').trigger('change');
+                $('#btn-edit').attr('data-id', response.id);
+                $('#modal-edit').modal('show');
+            },
+            error: function (response) {
+                errorMessage('An error occurred: ' + response.responseText);
+            }
+        })
+    }
+
+    function validEdit() {
+
+        let date = $('#DateEdit').val(),
+            name = $('#NameEdit').val(),
+            price = $('#PriceEdit').val();
+
+        hideFormInvalid('#DateEdit');
+        hideFormInvalid('#NameEdit');
+        hideFormInvalid('#PriceEdit');
+
+        if (!date) {
+            errorFormInvalid('#DateEdit', 'Date field is required!');
+            return false;
+        }
+
+        if (!name) {
+            errorFormInvalid('#NameEdit', 'Name field is required!');
+            return false;
+        }
+
+        if (!price) {
+            errorFormInvalid('#Price', 'Price field is required!');
+            return false;
+        }
+
+        if (price < 0.01 || price > 10000) {
+            errorFormInvalid('#Price', 'Price is out of range!');
+            return false;
+        }
+
+        return true;
+    }
+
+    function edit() {
+        if (!validEdit()) {
+            return;
+        }
+
+        let tagsVal = $('#TagsEdit').val();
+        let tags = [];
+        if (tagsVal) {
+            for (let index in tagsVal) {
+                tags.push({ tagId: tagsVal[index] });
+            }
+        }
+
+        let url = '@Url.Action("Edit", "Transports")';
+        let formData = {
+            id: $('#btn-edit').attr('data-id'),
+            transporttypeid: $('#TransportTypeEdit').val(),
+            date: formatDate($('#DateEdit').val()),
+            name: $('#NameEdit').val(),
+            price: $('#PriceEdit').val(),
+            reasonid: $('#ReasonEdit').val(),
+            transporttags: tags
+        };
+
+        $('#btn-edit').attr('disabled', 'disabled');
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                successMessage('Successfully edited!');
+                reloadPage(1000);
+            },
+            error: function (response) {
+                errorMessage('An error occurred: ' + response.responseText);
+                $('#btn-edit').removeAttr('disabled');
+            }
+        })
+    }
+
+</script>

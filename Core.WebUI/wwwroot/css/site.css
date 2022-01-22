@@ -1,0 +1,136 @@
+﻿.content {
+    max-width: 1900px; 
+    margin: 0 auto;
+}
+
+.error-form {
+    display: none;
+}
+
+.color-indicator {
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.select2-selection__rendered {
+    line-height: 29px !important;
+    color: #fff !important;
+    padding-left: 0px !important;
+}
+
+.select2-search__field {
+    padding-left: 5px !important;
+}
+
+.select2-container .select2-selection--single {
+    height: calc(2.25rem + 2px) !important;
+    background-color: transparent !important;
+    border-color: #6c757d !important;
+}
+
+.select2-selection--multiple {
+    background-color: transparent !important;
+    border-color: #6c757d !important;
+    height: 41px;
+    padding-left: 5px;
+}
+
+.select2-selection--multiple .select2-selection__choice {
+    color: black !important;
+}
+
+.select2-selection__arrow {
+    height: 34px !important;
+    right: 5px !important;
+}
+
+.select2-container {
+    width: auto !important;
+}
+
+.select-multiple {
+    width: 10px !important;
+}
+
+.table td {
+    vertical-align: inherit !important;
+}
+
+.alert-in-list {
+    padding-top: 30px;
+    text-align: center;
+}
+
+.card-title {
+    line-height: 1.4;
+}
+
+
+.timeline-item {
+    background-color: #464d54 !important;
+}
+
+
+.profile-user {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #3f6791;
+    margin: 0 auto;
+    font-size: 48px;
+    text-align: center;
+    line-height: 95px;
+}
+
+.user-small {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+    line-height: 35px;
+    border-width: 2px;
+}
+
+.user-medium {
+    width: 100px;
+    height: 100px;
+    font-size: 45px;
+    line-height: 100px;
+    border-width: 2px;
+    margin-top: 10px;
+}
+
+.user-large {
+    width: 160px;
+    height: 160px;
+    font-size: 70px;
+    line-height: 160px;
+    border-width: 2px;
+    margin: 0;
+    margin-top: 10px;
+}
+
+.logo {
+    float: left;
+    line-height: .8;
+    margin-left: 0.8rem;
+    margin-right: 0.5rem;
+    margin-top: -3px;
+    width: auto;
+    border-radius: 50%;
+    padding: 7px;
+    color: #454d55 !important;
+    background-color: rgba(255,255,255,.8);
+}
+
+.profile-username {
+    margin-top: 15px !important;
+}
+
+.nav-link {
+    color: #cfcfcf !important;
+}
+
+.nav-link.active {
+    border-left: 4px solid #3f4e5e;
+    background-color: #3a3e42;
+}

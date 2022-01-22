@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"] | TransportControl</title>
+
+    <link rel="apple-touch-icon" sizes="57x57" href="~/dist/images/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="~/dist/images/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="~/dist/images/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="~/dist/images/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="~/dist/images/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="~/dist/images/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="~/dist/images/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="~/dist/images/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="~/dist/images/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="~/dist/images/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/dist/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="~/dist/images/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/dist/images/favicon-16x16.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="~/dist/images/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="~/lib/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="~/lib/select2/css/select2.min.css">
+    <link rel="stylesheet" href="~/lib/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <link rel="stylesheet" href="~/lib/toastr/toastr.min.css">
+    <link rel="stylesheet" href="~/lib/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="~/lib/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+    <link rel="stylesheet" href="~/lib/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <link rel="stylesheet" href="~/css/site.css">
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/dist/js/adminlte.js"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <script src="~/lib/moment/moment.min.js"></script>
+    <script src="~/lib/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+    <script src="~/lib/daterangepicker/daterangepicker.js"></script>
+    <script src="~/lib/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+    <script src="~/lib/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/js/site.js"></script>
+
+    <script src="~/lib/jquery-mousewheel/jquery.mousewheel.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.8.1/jquery.validate.min.js"></script>
+    <script src="~/lib/chart.js/Chart.min.js"></script>
+</head>
+<body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed sidebar-collapse">
+    <div class="wrapper">
+
+        <div class="preloader flex-column justify-content-center align-items-center">
+            <div class="logo animation__wobble" style="padding: 10px; font-size: 28px;"><i class="nav-icon fas fa-car"></i></div>
+        </div>
+
+        <partial name="_Navbar" />
+
+        <partial name="_Siderbar" />
+
+        <div class="content-wrapper">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">@ViewData["Title"]</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home">Home</a></li>
+                                <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="content">
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </section>
+        </div>
+        <aside class="control-sidebar control-sidebar-dark">
+        </aside>
+
+        <partial name="_Footer" />
+    </div>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,229 @@
+﻿<div class="card card-primary" id="create-card">
+    <div class="card-header">
+        <h5 class="card-title">Create New</h5>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="TransportType" class="col-lg-12 control-label">Type</label>
+                    <div class="col-lg-12">
+                        @Html.DropDownList("TransportType", new SelectList(ViewBag.Types, "Id", "Name"), new { @class = "from-control select2-none" })
+                        <span id="TransportType-msg" class="error-form text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="Date" class="col-lg-12 control-label">Date</label>
+                    <div class="col-lg-12">
+                        <div class="input-group date datepickertime" id="Date-container" data-target-input="nearest">
+                            <input type="text" class="form-control datetimepicker-input" id="Date" data-target="#Date-container" />
+                            <div class="input-group-append" data-target="#Date-container" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                        <span id="Date-msg" class="error-form text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="Name" class="col-lg-12 control-label">Name</label>
+                    <div class="col-lg-12">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="Name" placeholder="Name" maxlength="30">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-signature"></i></span>
+                            </div>
+                        </div>
+                        <span id="Name-msg" class="error-form text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="Price" class="col-lg-12 control-label">Price</label>
+                    <div class="col-lg-12">
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="Price" placeholder="Price" min="0.01" max="10000">
+                            <div class="input-group-append">
+                                <span class="input-group-text">.00</span>
+                            </div>
+                        </div>
+                        <span id="Price-msg" class="error-form text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="Reason" class="col-lg-12 control-label">Reason</label>
+                    <div class="col-lg-12">
+                        @Html.DropDownList("Reason", new SelectList(ViewBag.Reasons, "Id", "Name"), new { @class = "from-control select2-none" })
+                        <span id="Reason-msg" class="error-form text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="Tags" class="col-lg-12 control-label">Tags</label>
+                    <div class="col-lg-12">
+                        @Html.DropDownList("Tags", new SelectList(ViewBag.Tags, "Id", "Name"), new { @class = "from-control form-control-sm select2 select-multiple", @multiple = "multiple" })
+                        <span id="Tags-msg" class="error-form text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="card-footer">
+        <button id="btn-create" type="submit" class="btn btn-primary">Create</button>
+    </div>
+
+    <div class="overlay dark" style="display: none;">
+        <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+        $('#btn-create').on('click', create);
+        $('#TransportType').on('change', updateFieldsByType);
+        $('#Date').val(dateFormated());
+    })
+
+    function updateFieldsByType() {
+
+        let id = $('#TransportType').val();
+        if (!id) return;
+
+        blockUICard('#create-card', true);
+
+        let url = '@Url.Action("Get", "TransportTypes")';
+        let formData = {
+            id: id,
+        };
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+
+                $('#Price').val(response.price);
+                $('#Name').val(response.name);
+
+                blockUICard('#create-card', false);
+            },
+            error: function (response) {
+                blockUICard('#create-card', false);
+            }
+        })
+
+    }
+
+    function validCreate() {
+
+        let date = $('#Date').val(),
+            name = $('#Name').val(),
+            price = $('#Price').val();
+
+        hideFormInvalid('#Date');
+        hideFormInvalid('#Name');
+        hideFormInvalid('#Price');
+
+        if (!date) {
+            errorFormInvalid('#Date', 'Date field is required!');
+            return false;
+        }
+
+        if (!name) {
+            errorFormInvalid('#Name', 'Name field is required!');
+            return false;
+        }
+
+        if (!price) {
+            errorFormInvalid('#Price', 'Price field is required!');
+            return false;
+        }
+
+        if (price < 0.01 || price > 10000) {
+            errorFormInvalid('#Price', 'Price is out of range!');
+            return false;
+        }
+
+        return true;
+    }
+
+    function create() {
+        if (!validCreate()) {
+            return;
+        }
+
+        let tagsVal = $('#Tags').val();
+        let tags = [];
+        if (tagsVal) {
+            for (let index in tagsVal) {
+                tags.push({ tagId: tagsVal[index] });
+            }
+        }
+
+        let url = '@Url.Action("Create", "Transports")';
+        let formData = {
+            transporttypeid: $('#TransportType').val(),
+            date: formatDate($('#Date').val()),
+            name: $('#Name').val(),
+            price: $('#Price').val(),
+            reasonid: $('#Reason').val(),
+            transporttags: tags
+        };
+
+        $('#btn-create').attr('disabled', 'disabled');
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                successMessage('Successfully created!');
+                reloadPage(1000);
+            },
+            error: function (response) {
+                errorMessage('An error occurred: ' + response.responseText);
+                $('#btn-create').removeAttr('disabled');
+            }
+        })
+    }
+
+</script>

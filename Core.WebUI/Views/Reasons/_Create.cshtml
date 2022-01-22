@@ -1,0 +1,84 @@
+﻿<div class="card card-primary">
+    <div class="card-header">
+        <h5 class="card-title">Create New</h5>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="Name" class="col-lg-12 control-label">Name</label>
+                    <div class="col-lg-12">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="Name" placeholder="Name" maxlength="30">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-signature"></i></span>
+                            </div>
+                        </div>
+                        <span id="Name-msg" class="error-form text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="card-footer">
+        <button id="btn-create" type="submit" class="btn btn-primary">Create</button>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+        $('#btn-create').on('click', create);
+    })
+
+    function valid() {
+
+        let name = $('#Name').val();
+
+        hideFormInvalid('#Name');
+
+        if (!name) {
+            errorFormInvalid('#Name', 'Name field is required!');
+            return false;
+        }
+
+        return true;
+    }
+
+    function create() {
+        if (!valid()) {
+            return;
+        }
+
+        let url = '@Url.Action("Create", "Reasons")';
+        let formData = {
+            name: $('#Name').val()
+        };
+
+        $('#btn-create').attr('disabled', 'disabled');
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                successMessage('Successfully created!');
+                reloadPage(1000);
+            },
+            error: function (response) {
+                errorMessage('An error occurred: ' + response.responseText);
+                $('#btn-create').removeAttr('disabled');
+            }
+        })
+    }
+
+</script>

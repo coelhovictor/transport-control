@@ -1,0 +1,154 @@
+﻿@{
+    ViewData["Title"] = "Transports";
+
+    var startDate = (string)ViewBag.StartDate;
+    var endDate = (string)ViewBag.EndDate;
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card card-primary" id="timeline-card">
+            <div class="card-header">
+                <h5 class="card-title">Timeline</h5>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label for="DateStart" class="col-lg-12 control-label">Start date</label>
+                            <div class="col-lg-12">
+                                <div class="input-group date datepickertime" id="DateStart-container" data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input" id="DateStart" data-target="#DateStart-container" value="@startDate" />
+                                    <div class="input-group-append" data-target="#DateStart-container" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                                <span id="DateStart-msg" class="error-form text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label for="DateEnd" class="col-lg-12 control-label">End date</label>
+                            <div class="col-lg-12">
+                                <div class="input-group date datepickertime" id="DateEnd-container" data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input" id="DateEnd" data-target="#DateEnd-container" value="@endDate"/>
+                                    <div class="input-group-append" data-target="#DateEnd-container" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                                <span id="DateEnd-msg" class="error-form text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-4 d-flex">
+                        <div class="form-group align-self-end">
+                            <button id="btn-search" type="button" class="btn btn-primary">Search</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <hr />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div id="timeline-container"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="overlay dark" style="display: none;">
+                <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <partial name="_Create" />
+    </div>
+
+</div>
+
+<script>
+    $(function () {
+        if (!$('#DateStart').val()) $('#DateStart').val(firstdateFormated());
+        if (!$('#DateEnd').val()) $('#DateEnd').val(lastdateFormated());
+
+        $('#btn-search').on('click', search);
+
+        search();
+    })
+
+    function valid() {
+
+        let dateStart = $('#DateStart').val(),
+            dateEnd = $('#DateEnd').val();
+
+        hideFormInvalid('#DateStart');
+        hideFormInvalid('#DateEnd');
+
+        if (!dateStart) {
+            errorFormInvalid('#DateStart', 'Start date field is required!');
+            return false;
+        }
+
+        if (!dateEnd) {
+            errorFormInvalid('#DateEnd', 'End date field is required!');
+            return false;
+        }
+
+        return true;
+    }
+
+    function search() {
+        if (!valid()) {
+            return;
+        }
+
+        let url = '@Url.Action("Index", "Transports")';
+        let formData = {
+            startDate: formatDate($('#DateStart').val()),
+            endDate: formatDate($('#DateEnd').val())
+        };
+
+        blockUICard('#timeline-card', true);
+
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: formData,
+            success: function (response) {
+                $('#timeline-container').html(response);
+                blockUICard('#timeline-card', false);
+            },
+            error: function (response) {
+                errorMessage('An error occurred: ' + response.responseText);
+                blockUICard('#timeline-card', false);
+            }
+        })
+    }
+
+</script>
+
+<partial name="_Edit" />
+
+<partial name="_Delete" />

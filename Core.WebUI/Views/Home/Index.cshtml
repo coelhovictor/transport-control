@@ -1,0 +1,94 @@
+﻿@model IEnumerable<Core.Application.DTOs.TransportDateDTO>
+
+@{
+    ViewData["Title"] = "Dashboard";
+
+    var totalWeek = (decimal?)ViewBag.TotalWeek;
+    var totalLastWeek = (decimal?)ViewBag.TotalLastWeek;
+    var totalMonth = (decimal?)ViewBag.TotalMonth;
+    var totalLastMonth = (decimal?)ViewBag.TotalLastMonth;
+
+    var monthBalance = (int)ViewBag.MonthBalance;
+    var weekBalance = (int)ViewBag.WeekBalance;
+}
+
+<div class="row">
+    <div class="col-md-8">
+
+        <partial name="_MonthReport" />
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card card-primary">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <p class="d-flex flex-column">
+                                <span>
+                                    <span class="text-bold text-lg">$@totalWeek</span>&nbsp; &nbsp;
+                                    @if (weekBalance > 0)
+                                    {
+                                        <span class="text-danger">
+                                            <i class="fas fa-arrow-up"></i> @weekBalance%
+                                        </span>
+                                    }
+                                    else if (weekBalance < 0)
+                                    {
+                                        <span class="text-success">
+                                            <i class="fas fa-arrow-down"></i> @(-weekBalance)%
+                                        </span>
+                                    }
+                                </span>
+                                <span class="text-muted">Since last week</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        Total this week
+                        <a class="float-right" asp-action="Index" asp-controller="Transports"
+                           asp-route-start="@Html.FirstDateWeek().ToString("yyyy-MM-dd")"
+                           asp-route-end="@Html.LastDateWeek().ToString("yyyy-MM-dd")">See more</a>
+                    </div>
+                </div>
+
+                <div class="card card-primary">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <p class="d-flex flex-column">
+                                <span>
+                                    <span class="text-bold text-lg">$@totalMonth</span>&nbsp; &nbsp;
+                                    @if (monthBalance > 0)
+                                    {
+                                        <span class="text-danger">
+                                            <i class="fas fa-arrow-up"></i> @monthBalance%
+                                        </span>
+                                    }
+                                    else if (monthBalance < 0)
+                                    {
+                                        <span class="text-success">
+                                            <i class="fas fa-arrow-down"></i> @(-monthBalance)%
+                                        </span>
+                                    }
+                                </span>
+                                <span class="text-muted">Since last month</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        Total this month
+                        <a class="float-right" asp-action="Index" asp-controller="Transports" 
+                           asp-route-start="@Html.FirstDateMonth().ToString("yyyy-MM-dd")" 
+                           asp-route-end="@Html.LastDateMonth().ToString("yyyy-MM-dd")">See more</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>

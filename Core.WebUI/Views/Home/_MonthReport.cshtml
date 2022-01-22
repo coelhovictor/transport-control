@@ -1,0 +1,108 @@
+﻿@{
+
+    var totalThisYear = (decimal?)ViewBag.TotalThisYear;
+    var monthlyReport = (string)ViewBag.MonthlyReport;
+    var monthBalance = (int)ViewBag.MonthBalance;
+}
+
+<div class="card card-primary">
+    <div class="card-header border-0">
+        <h3 class="card-title">Monthly Report</h3>
+
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="d-flex">
+            <p class="d-flex flex-column">
+                <span class="text-bold text-lg">$@totalThisYear</span>
+                <span>Total this year</span>
+            </p>
+        </div>
+
+        <div class="position-relative mb-4">
+            <canvas id="month-chart" height="200"></canvas>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="d-flex flex-row justify-content-end">
+            <span class="mr-2">
+                <i class="fas fa-square" style="color: #3f6791;"></i> Total spend
+            </span>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var ticksStyle = {
+        fontColor: '#c3c3c3',
+        fontStyle: 'bold'
+    }
+
+    var mode = 'index'
+    var intersect = true
+
+    var $monthChart = $('#month-chart');
+
+    var monthChart = new Chart($monthChart, {
+        type: 'bar',
+        data: {
+            labels: ['JAN', 'FEB', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+            datasets: [
+                {
+                    backgroundColor: '#3f6791',
+                    borderColor: '#3f6791',
+                    data: @monthlyReport,
+                }
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            tooltips: {
+                mode: mode,
+                intersect: intersect
+            },
+            hover: {
+                mode: mode,
+                intersect: intersect
+            },
+            legend: {
+                display: false
+            },
+            scales: {
+                yAxes: [{
+                    gridLines: {
+                        display: true,
+                        lineWidth: '4px',
+                        color: 'rgba(0, 0, 0, .2)',
+                        zeroLineColor: 'transparent'
+                    },
+                    ticks: $.extend({
+                        beginAtZero: true,
+
+                        callback: function (value) {
+                            if (value >= 1000) {
+                                value /= 1000
+                                value += 'k'
+                            }
+
+                            return '$' + value
+                        }
+                    }, ticksStyle)
+                }],
+                xAxes: [{
+                    display: true,
+                    gridLines: {
+                        display: false
+                    },
+                    ticks: ticksStyle
+                }]
+            }
+        }
+    })
+
+</script>

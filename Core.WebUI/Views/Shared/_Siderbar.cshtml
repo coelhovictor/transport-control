@@ -1,0 +1,54 @@
+﻿<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a asp-action="Index" asp-controller="Home" class="brand-link">
+        <div class="logo"><i class="nav-icon fas fa-car"></i></div>
+        <span class="brand-text font-weight-light">TransportControl</span>
+    </a>
+
+    <div class="sidebar">
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">
+                    <a asp-action="Index" asp-controller="Home" class="nav-link @Html.IsActive("Index", "Home")">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            Dashboard
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-action="Index" asp-controller="Transports" class="nav-link @Html.IsActive("Index", "Transports")">
+                        <i class="nav-icon fas fa-car"></i>
+                        <p>
+                            Transports
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-header">OPTIONS</li>
+                <li class="nav-item">
+                    <a asp-action="Index" asp-controller="TransportTypes" class="nav-link @Html.IsActive("Index", "TransportTypes")">
+                        <i class="nav-icon fas fa-box"></i>
+                        <p>
+                            Transport Types
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-action="Index" asp-controller="Tags" class="nav-link @Html.IsActive("Index", "Tags")">
+                        <i class="nav-icon fas fa-tag"></i>
+                        <p>
+                            Tags
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-action="Index" asp-controller="Reasons" class="nav-link @Html.IsActive("Index", "Reasons")">
+                        <i class="nav-icon fas fa-sticky-note"></i>
+                        <p>
+                            Reasons
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>

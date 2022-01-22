@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Core.Application.DTOs.TagDTOGet>
+
+@{
+    ViewData["Title"] = "Tags";
+}
+
+<div class="row">
+    <div class="col-md-8">
+
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">All tags</h3>
+            </div>
+            <div class="card-body table-responsive p-0" style="max-height: 300px;">
+
+                @if (Model.Any())
+                {
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>@Html.DisplayNameFor(modelItem => modelItem.Name)</th>
+                                <th>@Html.DisplayNameFor(modelItem => modelItem.Color)</th>
+                                <th>@Html.DisplayNameFor(modelItem => modelItem.CreatedAt)</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                    <td>
+                                        <span class="color-indicator"
+                                              style="background-color: @Html.DisplayFor(modelItem => item.Color)">
+                                            @Html.DisplayFor(modelItem => item.Color)
+                                        </span>
+                                    </td>
+                                    <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+                                    <td class="text-right">
+                                        <a data-id="@item.Id" class="btn btn-primary btn-sm btn-modal-edit" href="#">
+                                            <i class="fas fa-pencil-alt">
+                                            </i>
+                                            Edit
+                                        </a>
+                                        <a data-id="@item.Id" class="btn btn-danger btn-sm btn-modal-delete" href="#">
+                                            <i class="fas fa-trash">
+                                            </i>
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="alert alert-in-list">
+                        <h5><i class="icon fas fa-exclamation-triangle"></i> Empty!</h5>
+                        No tags created.
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+        <partial name="_Create" />
+    </div>
+</div>
+
+<partial name="_Edit" />
+
+<partial name="_Delete" />

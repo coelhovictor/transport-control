@@ -1,0 +1,71 @@
+﻿@model Core.Application.DTOs.UserProfileDTOGet
+
+@inject Microsoft.AspNetCore.Identity.UserManager<Core.Infra.Data.Identity.ApplicationUser> userManager;
+
+@{
+    ViewData["Title"] = "Profile";
+    var currentUser = @User.UserProfile(userManager);
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary card-outline">
+                    <div class="card-body box-profile">
+                        <div class="text-center">
+                            @if (!string.IsNullOrEmpty(currentUser.Picture))
+                            {
+                                <img class="profile-user user-medium" src="@currentUser.Picture" />
+                            }
+                            else
+                            {
+                                <div class="profile-user user-medium">@Context.User.Identity.Name.ToUpper()[0]</div>
+                            }
+                        </div>
+
+                        <h3 class="profile-username text-center">@currentUser.FirstName @currentUser.LastName</h3>
+                        <p class="text-muted text-center">Joined in @Model.CreatedAt.ToString("dd, MMM yyyy")</p>
+                    </div>
+                    <div class="card-footer p-0">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#account" data-toggle="tab">
+                                    Account
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#informations" data-toggle="tab">
+                                    Informations
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#profile-picture" data-toggle="tab">
+                                    Picture
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-9">
+
+        <partial name="_Edit" />
+
+    </div>
+
+</div>
+
+<script>
+
+    $(function () {
+
+        $('#Birthdate').val(dateFormatedWithDateWithoutTime('@(Model.Birthdate.HasValue
+            ? @Model.Birthdate.Value.ToString("yyyy/MM/dd") : "")'));
+    })
+
+</script>

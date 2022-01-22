@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Core.Application.DTOs.TransportDateDTO>
+
+<div class="timeline">
+
+    @foreach (var item in Model)
+    {
+        <div class="time-label">
+            <span class="bg-blue">@item.Date.ToString("dd MMM. yyyy")</span>
+        </div>
+
+        @foreach (var transport in item.Transports)
+        {
+            <div>
+                <i class="fas fa-car bg-blue"></i>
+                <div class="timeline-item">
+                    <b class="time"><i class="fas fa-clock"></i>&nbsp; @transport.Date.ToString("HH:mm")</b>
+                    <b class="time"><i class="fas fa-coins"></i>&nbsp; @Html.DisplayFor(modelItem => transport.Price)</b>
+
+                    <h3 class="timeline-header">
+                        @if (transport.TransportType != null)
+                        {
+                            <span class="badge" style="background-color: @transport.TransportType.Color">@transport.TransportType.Name</span>
+                        }
+                        <a href="#">@transport.Name</a>
+                        @if (transport.Reason != null)
+                        {
+                            <span>(@transport.Reason.Name)</span>
+                        }
+                    </h3>
+
+                    <div class="timeline-footer">
+                        <a data-id="@transport.Id" class="btn btn-primary btn-sm btn-modal-edit" href="#">
+                            <i class="fas fa-pencil-alt">
+                            </i>
+                            Edit
+                        </a>
+                        <a data-id="@transport.Id" class="btn btn-danger btn-sm btn-modal-delete" href="#">
+                            <i class="fas fa-trash">
+                            </i>
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    <div>
+        <i class="fas fa-clock bg-gray"></i>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.btn-modal-edit').on('click', modalEdit);
+        $('.btn-modal-delete').on('click', modalDelete);
+    })
+</script>

@@ -36,7 +36,8 @@ namespace Core.WebUI.Controllers
 
         public async Task<IActionResult> Get(string id)
         {
-            if (!ModelState.IsValid) return BadRequest("Invalid data");
+            if (!ModelState.IsValid)
+                return BadRequest(Utilities.InvalidStateMessages(ModelState));
 
             var profile = await _profileService.GetByEmailAsync(User.Identity.Name);
             if (profile == null) return Unauthorized("Account not found");
@@ -50,7 +51,8 @@ namespace Core.WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(TagDTOSet tagDTO)
         {
-            if(!ModelState.IsValid) return BadRequest("Invalid data");
+            if (!ModelState.IsValid)
+                return BadRequest(Utilities.InvalidStateMessages(ModelState));
 
             var profile = await _profileService.GetByEmailAsync(User.Identity.Name);
             if (profile == null) return Unauthorized("Account not found");
@@ -67,7 +69,8 @@ namespace Core.WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(string id, TagDTOSet tagDTO)
         {
-            if (!ModelState.IsValid) return BadRequest("Invalid data");
+            if (!ModelState.IsValid)
+                return BadRequest(Utilities.InvalidStateMessages(ModelState));
 
             var profile = await _profileService.GetByEmailAsync(User.Identity.Name);
             if (profile == null) return Unauthorized("Account not found");
@@ -81,7 +84,8 @@ namespace Core.WebUI.Controllers
 
         public async Task<IActionResult> Delete(string id)
         {
-            if (!ModelState.IsValid) return BadRequest("Invalid data");
+            if (!ModelState.IsValid)
+                return BadRequest(Utilities.InvalidStateMessages(ModelState));
 
             var profile = await _profileService.GetByEmailAsync(User.Identity.Name);
             if (profile == null) return Unauthorized("Account not found");

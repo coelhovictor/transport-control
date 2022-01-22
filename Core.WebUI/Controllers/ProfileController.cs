@@ -42,9 +42,10 @@ namespace Core.WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(string id, UserProfileDTOSet profile, List<IFormFile> files)
         {
-            if (!ModelState.IsValid) return BadRequest("Invalid data");
+            if (!ModelState.IsValid)
+                return BadRequest(Utilities.InvalidStateMessages(ModelState));
 
-            if(profile.Email != User.Identity.Name) return Unauthorized("Account not found");
+            if (profile.Email != User.Identity.Name) return Unauthorized("Account not found");
 
             if (profile == null) return BadRequest("Invalid data");
             profile.Id = id;

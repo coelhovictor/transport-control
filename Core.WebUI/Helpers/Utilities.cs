@@ -1,7 +1,9 @@
 ﻿using Core.Infra.Data.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Globalization;
+using System.Linq;
 using System.Security.Claims;
 
 namespace System
@@ -37,6 +39,11 @@ namespace System
                                action == routeAction;
 
             return returnActive ? "active" : "";
+        }
+
+        public static string InvalidStateMessages(ModelStateDictionary modelState)
+        {
+            return string.Join("; ", modelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
         }
 
         public static DateTime FirstDateWeek(this IHtmlHelper html)

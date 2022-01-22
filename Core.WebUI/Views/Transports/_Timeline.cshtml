@@ -14,7 +14,7 @@
                 <i class="fas fa-car bg-blue"></i>
                 <div class="timeline-item">
                     <b class="time"><i class="fas fa-clock"></i>&nbsp; @transport.Date.ToString("HH:mm")</b>
-                    <b class="time"><i class="fas fa-coins"></i>&nbsp; @Html.DisplayFor(modelItem => transport.Price)</b>
+                    <b class="time"><i class="fas fa-coins"></i>&nbsp; @Html.FormatMoney(transport.Price)</b>
 
                     <h3 class="timeline-header">
                         @if (transport.TransportType != null)

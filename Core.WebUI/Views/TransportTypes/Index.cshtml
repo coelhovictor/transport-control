@@ -30,7 +30,7 @@
                             {
                             <tr>
                                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                                <td>@Html.FormatMoney(item.Price)</td>
                                 <td>
                                     <span class="color-indicator"
                                           style="background-color: @Html.DisplayFor(modelItem => item.Color)">

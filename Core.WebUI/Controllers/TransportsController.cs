@@ -74,7 +74,7 @@ namespace Core.WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(TransportDTOSet transportDTO)
         {
-            if (!ModelState.IsValid) return BadRequest("Invalid data");
+            if (!ModelState.IsValid) return BadRequest("Invalid state data");
 
             var profile = await _profileService.GetByEmailAsync(User.Identity.Name);
             if (profile == null) return Unauthorized("Account not found");

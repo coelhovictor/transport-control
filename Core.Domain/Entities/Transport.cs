@@ -41,7 +41,7 @@ namespace Core.Domain.Entities
             {
                 DomainExceptionValidation.When(name.Length > 30, "Name is too long");
             }
-            DomainExceptionValidation.When(price <= 0 || price > 10000, "Invalid Price value");
+            DomainExceptionValidation.When(price < 0 || price > 10000, "Invalid Price value");
 
             Name = name;
             Price = price;

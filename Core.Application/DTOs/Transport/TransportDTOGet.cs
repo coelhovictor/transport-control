@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace Core.Application.DTOs
@@ -13,9 +11,6 @@ namespace Core.Application.DTOs
         public string Id { get; set; }
         public string Name { get; set; }
 
-        [Column(TypeName = "decimal(18,2)")]
-        [DisplayFormat(DataFormatString = "{0:C2}")]
-        [DataType(DataType.Currency)]
         public decimal? Price { get; set; }
 
         public DateTime Date { get; set; }

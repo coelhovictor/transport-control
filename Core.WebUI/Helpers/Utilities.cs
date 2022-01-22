@@ -1,10 +1,10 @@
 ﻿using Core.Infra.Data.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
+using System.Globalization;
 using System.Security.Claims;
 
-namespace Core.WebUI.Helpers
+namespace System
 {
     public static class Utilities
     {
@@ -18,6 +18,12 @@ namespace Core.WebUI.Helpers
         {
             string env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             return env.Equals("Development") ? true : false;
+        }
+
+        public static string FormatMoney(this IHtmlHelper html, decimal? value)
+        {
+            if (!value.HasValue) return "0.00";
+            return value.Value.ToString("c", new CultureInfo("en-US", false));
         }
 
         public static string IsActive(this IHtmlHelper html, string action, string control)

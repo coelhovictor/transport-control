@@ -11,11 +11,11 @@ $(function () {
     $('.select2-none').val(null); // Select the option with a value of 'US'
     $('.select2-none').trigger('change');
     $('.datepickertime').datetimepicker({
-        format: 'DD/MM/YYYY HH:mm',
+        format: 'MM/DD/YYYY HH:mm',
         icons: { time: 'far fa-clock' }
     });
     $('.datepickertime-wtime').datetimepicker({
-        format: 'DD/MM/YYYY',
+        format: 'MM/DD/YYYY',
         icons: { time: 'far fa-clock' }
     });
     $('.daterangepicker').daterangepicker();
@@ -43,19 +43,19 @@ function lastdateFormated() {
 
 function dateFormatedWithDate(date) {
     let d = new Date(date);
-    return ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" +
+    return ("0" + (d.getMonth() + 1)).slice(-2) + "/" + ("0" + d.getDate()).slice(-2) + "/" +
         d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 }
 
 function dateFormatedWithDateWithoutTime(date) {
     if (!date) return '';
     let d = new Date(date);
-    return ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" +
+    return ("0" + (d.getMonth() + 1)).slice(-2) + "/" + ("0" + d.getDate()).slice(-2) + "/" +
         d.getFullYear();
 }
 
 function formatDate(date) {
-    return date.replace('/', '-');
+    return date.replaceAll('/', '-');
 }
 
 function successMessage(message) {

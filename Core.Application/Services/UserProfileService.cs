@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Core.Application.DTOs;
 using Core.Application.Interfaces;
+using Core.Domain.Account;
 using Core.Domain.Entities;
 using Core.Domain.Interfaces;
+using Core.Domain.Models;
 using System.Threading.Tasks;
 
 namespace Core.Application.Services
@@ -10,11 +12,14 @@ namespace Core.Application.Services
     public class UserProfileService : IUserProfileService
     {
         private IUserProfileRepository _profileRepository;
+        private readonly IAuthenticate _authentication;
         private readonly IMapper _mapper;
 
-        public UserProfileService(IUserProfileRepository profileRepository, IMapper mapper)
+        public UserProfileService(IUserProfileRepository profileRepository, IAuthenticate authentication,
+            IMapper mapper)
         {
             _profileRepository = profileRepository;
+            _authentication = authentication;
             _mapper = mapper;
         }
 
@@ -46,6 +51,24 @@ namespace Core.Application.Services
         {
             var profileEntity = _mapper.Map<UserProfile>(profileDTO);
             await _profileRepository.UpdateAsync(profileEntity);
+        }
+
+        public async Task<ChangePasswordAttempt> ChangePassword(string email, string password, 
+            string newPassword, string confirmPassword)
+        {
+            if (string.IsNullOrEmpty(password))
+                return new ChangePasswordAttempt() { Success = false, Message = "Current Password is required." };
+
+            if (string.IsNullOrEmpty(newPassword))
+                return new ChangePasswordAttempt() { Success = false, Message = "Password is required." };
+
+            if (string.IsNullOrEmpty(confirmPassword))
+                return new ChangePasswordAttempt() { Success = false, Message = "Confirm Password is required." };
+
+            if (newPassword != confirmPassword)
+                return new ChangePasswordAttempt() { Success = false, Message = "Passwords don`t match." };
+
+            return await _authentication.ChangePassword(email, password, newPassword);
         }
     }
 }

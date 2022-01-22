@@ -49,8 +49,8 @@ namespace Core.WebUI.Controllers
             if (profile == null) return BadRequest("Invalid data");
             profile.Id = id;
 
+            //CHANGE PICTURE PROFILE
             string picture = "";
-
             if(files.Any())
             {
                 string[] extensions = new string[3] { ".jpg", ".jpeg", ".png" };
@@ -69,6 +69,16 @@ namespace Core.WebUI.Controllers
             user.LastName = profile.LastName;
             if (!string.IsNullOrEmpty(picture)) user.Picture = picture;
             await _userManager.UpdateAsync(user);
+
+            //CHANGE PASSWORD
+            if (!string.IsNullOrEmpty(profile.Password))
+            {
+                var result = await _profileService.ChangePassword(User.Identity.Name, profile.CurrentPassword, profile.Password,
+                    profile.ConfirmPassword);
+
+                if (!result.Success)
+                    return BadRequest(result.Message);
+            }
 
             await _profileService.UpdateAsync(profile);
             return Json(profile);

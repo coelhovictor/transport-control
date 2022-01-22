@@ -11,6 +11,8 @@ namespace Core.Domain.Account
         Task<RegisterAttempt> RegisterUser(string email, string password, string firstName, string lastName,
             DateTime? birthDate, string profession, string location);
 
+        Task<ChangePasswordAttempt> ChangePassword(string email, string currentPassword, string newPassword);
+
         Task Logout();
     }
 }

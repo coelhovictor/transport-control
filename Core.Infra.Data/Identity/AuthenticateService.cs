@@ -53,6 +53,25 @@ namespace Core.Infra.Data.Identity
                 Message = message };
         }
 
+        public async Task<ChangePasswordAttempt> ChangePassword(string email, string currentPassword, string newPassword)
+        {
+            ApplicationUser user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return new ChangePasswordAttempt() { Success = false, Message = "Account not found." };
+
+            IdentityResult result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+
+            string message = "";
+            if (result.Errors.Any())
+                message = result.Errors.First().Description;
+
+            return new ChangePasswordAttempt
+            {
+                Success = result.Succeeded,
+                Message = message
+            };
+        }
+
         public async Task Logout()
         {
             await _signInManager.SignOutAsync();

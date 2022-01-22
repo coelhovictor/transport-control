@@ -95,7 +95,6 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
-
                             <div class="input-group">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="Photo" accept=".jpg,.jpeg,.png">
@@ -106,6 +105,49 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="tab-pane" id="change-password">
+
+                <div class="form-group">
+                    <label for="CurrentPassword" class="col-sm-4 col-form-label">Current Password</label>
+                    <div class="input-group col-sm-12">
+                        <input class="form-control" type="password" id="CurrentPassword" placeholder="Current Password" maxlength="25" />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <span id="CurrentPassword-msg" class="error-form text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="Password" class="col-sm-2 col-form-label">Password</label>
+                    <div class="input-group col-sm-12">
+                        <input class="form-control" type="password" id="Password" placeholder="Password" maxlength="25" />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <span id="Password-msg" class="error-form text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="ConfirmPassword" class="col-sm-4 col-form-label">Confirm Password</label>
+                    <div class="input-group col-sm-12">
+                        <input class="form-control" type="password" id="ConfirmPassword" placeholder="Confirm Password" maxlength="25" />
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <span id="ConfirmPassword-msg" class="error-form text-danger"></span>
+                </div>
+
             </div>
 
         </div>
@@ -150,13 +192,19 @@
             lastName = $('#LastName').val(),
             profession = $('#Profession').val(),
             location = $('#Location').val(),
-            photo = $('#Photo')[0].files[0];
+            photo = $('#Photo')[0].files[0],
+            currentPassword = $('#CurrentPassword').val(),
+            password = $('#Password').val(),
+            confirmPassword = $('#ConfirmPassword').val();
 
         hideFormInvalid('#FirstName');
         hideFormInvalid('#LastName');
         hideFormInvalid('#Profession');
         hideFormInvalid('#Location');
         hideFormInvalid('#Photo');
+        hideFormInvalid('#CurrentPassword');
+        hideFormInvalid('#Password');
+        hideFormInvalid('#ConfirmPassword');
 
         if (!firstName) {
             errorFormInvalid('#FirstName', 'First name field is required!');
@@ -197,6 +245,29 @@
             return false;
         }
 
+        if (password) {
+            if (!currentPassword) {
+                errorFormInvalid('#CurrentPassword', 'Current Password is required.');
+                return false;
+            }
+            if (currentPassword.length < 6 || currentPassword.length > 25) {
+                errorFormInvalid('#CurrentPassword', 'The Current Password must be at least 6 and at max 25 characters long.');
+                return false;
+            }
+            if (password.length < 6 || password.length > 25) {
+                errorFormInvalid('#Password', 'The Password must be at least 6 and at max 25 characters long.');
+                return false;
+            }
+            if (confirmPassword && (confirmPassword.length < 6 || confirmPassword.length > 25)) {
+                errorFormInvalid('#ConfirmPassword', 'The Confirm Password must be at least 6 and at max 25 characters long.');
+                return false;
+            }
+            if (password !== confirmPassword) {
+                errorFormInvalid('#ConfirmPassword', 'Passwords don`t match.');
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -215,6 +286,9 @@
         formData.append('profile.birthDate', formatDate($('#Birthdate').val()));
         formData.append('profile.profession', $('#Profession').val());
         formData.append('profile.location', $('#Location').val());
+        formData.append('profile.currentPassword', $('#CurrentPassword').val());
+        formData.append('profile.password', $('#Password').val());
+        formData.append('profile.confirmPassword', $('#ConfirmPassword').val());
         formData.append('files', $('#Photo')[0].files[0]);
 
         $('#btn-edit').attr('disabled', 'disabled');

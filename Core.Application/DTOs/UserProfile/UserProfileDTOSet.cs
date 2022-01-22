@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -27,6 +28,26 @@ namespace Core.Application.DTOs
 
         [MaxLength(35)]
         public string Location { get; set; }
+
+        [IgnoreMap]
+        [StringLength(25, ErrorMessage = "The {0} must be at least {2} and at max " +
+            "{1} characters long", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        public string CurrentPassword { get; set; }
+
+        [IgnoreMap]
+        [StringLength(25, ErrorMessage = "The {0} must be at least {2} and at max " +
+            "{1} characters long", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        [IgnoreMap]
+        [StringLength(25, ErrorMessage = "The {0} must be at least {2} and at max " +
+            "{1} characters long", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm Password")]
+        [Compare("Password", ErrorMessage = "Passwords don`t match")]
+        public string ConfirmPassword { get; set; }
 
     }
 }
